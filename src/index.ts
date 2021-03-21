@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -11,6 +11,10 @@ const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
   });
 
   // and load the index.html of the app.
@@ -44,3 +48,20 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.on('shortcutRefresh', (event, arg) => {
+  console.log("event", event)
+  console.log("arg", arg)
+  globalShortcut.unregisterAll()
+  arg.forEach((shortcut: any) => {
+    try { 
+      const ret = globalShortcut.register(shortcut.shortcut, () => {
+        console.log(`${shortcut.shortcut} called!`)
+      })
+      if (!ret) {
+        console.log('registration failed')
+      }
+    } catch (error) {
+      console.log(`Error converting ${shortcut.shortcut}:`, error)
+    }
+  })
+})
