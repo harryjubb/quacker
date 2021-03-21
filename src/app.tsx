@@ -1,8 +1,9 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import React from 'react'
 
-function render() {
-  ReactDOM.render(<h2>Hello from React!</h2>, document.getElementById('app'))
+export default function App() {
+    return (
+        <div>
+            Hello
+        </div>
+    )
 }
-
-render()
