@@ -58,6 +58,7 @@ ipcMain.handle('shortcutRefresh', (event, arg) => {
     try { 
       const ret = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
+        eval(shortcut.action)
       })
       if (!ret) {
         console.log('registration failed')
