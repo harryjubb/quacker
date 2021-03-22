@@ -1,10 +1,13 @@
 import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
+console.log("MAIN_WINDOW_WEBPACK_ENTRY", MAIN_WINDOW_WEBPACK_ENTRY)
+console.log("MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY", MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY)
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -12,8 +15,7 @@ const createWindow = (): void => {
     height: 600,
     width: 800,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
   });
 
@@ -48,7 +50,7 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.on('shortcutRefresh', (event, arg) => {
+ipcMain.handle('shortcutRefresh', (event, arg) => {
   console.log("event", event)
   console.log("arg", arg)
   globalShortcut.unregisterAll()

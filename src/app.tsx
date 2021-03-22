@@ -4,14 +4,18 @@ import Col from 'react-bootstrap/esm/Col'
 import Container from 'react-bootstrap/esm/Container'
 import Row from 'react-bootstrap/esm/Row'
 
-const { ipcRenderer } = window.require('electron')
+const api = (window as any).api
 
 export default function App() {
 
   const [shortcuts, setShortcuts] = useState([])
 
   useEffect(() => {
-    ipcRenderer.send('shortcutRefresh', shortcuts)
+    if (api.shortcutRefresh) {
+      api.shortcutRefresh(shortcuts)
+    } else {
+      console.log('no shortcutRefresh')
+    }
   })
 
   return (
