@@ -19,14 +19,24 @@ const createWindow = (): void => {
   //   })
   // })
 
+
+  const windowSession = session.fromPartition('persist:quacker')
+  
+  // Disable all browser permissions
+  windowSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    return callback(false)
+  })
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
     webPreferences: {
+      session: windowSession,
       contextIsolation: true,
       sandbox: true,
       disableBlinkFeatures: 'Auxclick',
+      webSecurity: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
   })
