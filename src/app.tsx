@@ -7,6 +7,11 @@ import FormControl from 'react-bootstrap/esm/FormControl'
 import InputGroup from 'react-bootstrap/esm/InputGroup'
 import Row from 'react-bootstrap/esm/Row'
 
+import AceEditor from "react-ace"
+
+import "ace-builds/src-noconflict/mode-javascript"
+import "ace-builds/src-noconflict/theme-github"
+
 const api = (window as any).api
 
 export default function App() {
@@ -39,10 +44,14 @@ export default function App() {
                     onChange={event => setShortcuts([...shortcuts.slice(0, index), { shortcut: event.target.value, action: 'none' }, ...shortcuts.slice(index + 1)])}
                   />
                 </InputGroup>
-                <input
+                <AceEditor
+                  mode="javascript"
+                  theme="github"
                   value={shortcut.action}
-                  onChange={event => setShortcuts([...shortcuts.slice(0, index), { shortcut: shortcut.shortcut, action: event.target.value }, ...shortcuts.slice(index + 1)])}
-                />
+                  onChange={event => setShortcuts([...shortcuts.slice(0, index), { shortcut: shortcut.shortcut, action: event }, ...shortcuts.slice(index + 1)])}
+                  name={`editor_${index}`}
+                  editorProps={{ $blockScrolling: true }}
+                />,
                 </Card.Body>
               </Card>
             })
