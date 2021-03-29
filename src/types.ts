@@ -6,10 +6,10 @@ export interface Shortcut {
 }
 
 export interface SetShortcuts {
-  (shortcuts: Shortcut[]): void;
+  (shortcuts: Shortcut[]): void
 }
 
 export interface API {
   setShortcuts: SetShortcuts
-  handleInitialShortcuts: SetShortcuts
+  handleInitialShortcuts: (handler: SetShortcuts) => void
 }

@@ -1,12 +1,12 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { Shortcut } from './types'
+import { SetShortcuts, Shortcut } from './types'
 
 contextBridge.exposeInMainWorld('api', {
   setShortcuts: (shortcuts: Shortcut[]) => {
     ipcRenderer.invoke('setShortcuts', shortcuts)
   },
-  handleInitialShortcuts: (handler: any) => {
-    ipcRenderer.on('initialShortcuts', (event, initialShortcuts) => {
+  handleInitialShortcuts: (handler: SetShortcuts) => {
+    ipcRenderer.on('initialShortcuts', (event, initialShortcuts: Shortcut[]) => {
       handler(initialShortcuts)
     })
   }
