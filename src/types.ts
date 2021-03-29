@@ -5,10 +5,11 @@ export interface Shortcut {
   action: string
 }
 
-interface SetShortcuts {
+export interface SetShortcuts {
   (shortcuts: Shortcut[]): void;
 }
 
 export interface API {
   setShortcuts: SetShortcuts
+  handleInitialShortcuts: SetShortcuts
 }

@@ -131,8 +131,8 @@
   "dependencies": {
     "ace-builds": "^1.4.12",
     "bootstrap": "^4.6.0",
+    "electron-settings": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^7.0.2",
     "live-plugin-manager": "^0.15.1",
     "react": "^17.0.1",
     "react-ace": "^9.3.0",

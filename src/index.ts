@@ -1,6 +1,6 @@
 import vm from 'vm'
 import { app, session, BrowserWindow, globalShortcut, ipcMain, Notification, shell } from 'electron'
-import Store from 'electron-store'
+import settings from 'electron-settings'
 import robot from 'robotjs'
 import { Shortcut } from './types'
 
@@ -12,7 +12,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit()
 }
 
-const createWindow = (): void => {
+const createWindow = async (): Promise<void> => {
   // Set up Content Security Policy
   // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
   //   callback({
@@ -44,22 +44,24 @@ const createWindow = (): void => {
     }
   })
 
+  
   mainWindow.maximize()
-
+  
+  // Limit navigation
   const navigateHandler = (event: Electron.Event, newUrl: string) => {
     if (newUrl.startsWith('https://www.electronjs.org')) {
       shell.openExternal(newUrl)
     }
     event.preventDefault()
   }
-
-  // Limit navigation
-  mainWindow.webContents.on('will-navigate', navigateHandler)
   
+  mainWindow.webContents.on('will-navigate', navigateHandler)
   mainWindow.webContents.on('new-window', navigateHandler)
-
-  // and load the index.html of the app.
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+  
+  // Load the index.html of the app.
+  await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+  
+  mainWindow.webContents.send('initialShortcuts', await(settings.get('shortcuts')) ?? [])
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -89,9 +91,9 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.handle('setShortcuts', (event, arg) => {
+ipcMain.handle('setShortcuts', (event, shortcuts) => {
   globalShortcut.unregisterAll()
-  arg.forEach((shortcut: Shortcut) => {
+  shortcuts.forEach((shortcut: Shortcut) => {
     try { 
       const ret = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
@@ -107,4 +109,6 @@ ipcMain.handle('setShortcuts', (event, arg) => {
       console.error(`Error converting ${shortcut.shortcut}:`, error)
     }
   })
+  // FIXME: Possible race condition for multiple calls in quick succession
+  settings.set('shortcuts', shortcuts)
 })
