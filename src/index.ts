@@ -95,7 +95,8 @@ ipcMain.handle('setShortcuts', (event, arg) => {
     try { 
       const ret = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
-        const context = { robot, shell, Notification }
+        const secrets = JSON.parse(shortcut.secrets)
+        const context = { secrets, robot, shell, Notification }
         vm.createContext(context);
         vm.runInContext(shortcut.action, context)
       })
