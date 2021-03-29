@@ -8,17 +8,17 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit()
 }
 
-// Set up Content Security Policy
-session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-  callback({
-    responseHeaders: {
-      ...details.responseHeaders,
-      'Content-Security-Policy': ['default-src \'none\'']
-    }
-  })
-})
-
 const createWindow = (): void => {
+  // Set up Content Security Policy
+  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  //   callback({
+  //     responseHeaders: {
+  //       ...details.responseHeaders,
+  //       'Content-Security-Policy': ['default-src \'none\'']
+  //     }
+  //   })
+  // })
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 600,
