@@ -11,7 +11,7 @@
     "make:all": "electron-forge make --platform=darwin && electron-forge make --platform=linux && electron-forge make --platform=win32",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts .",
-    "robotjs:rebuild": "yarn electron-rebuild -f -t prod,optional,dev -w robotjs "
+    "robotjs:rebuild": "electron-rebuild -f -t prod,optional,dev -w robotjs "
   },
   "keywords": [
     "javascript",
