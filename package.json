@@ -8,6 +8,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make:all": "electron-forge make --platform=darwin && electron-forge make --platform=linux && electron-forge make --platform=win32",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts ."
   },
@@ -24,11 +25,17 @@
       "makers": [
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": ["darwin", "linux", "win32"]
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
         },
         {
           "name": "@electron-forge/maker-deb",
-          "platforms": ["linux"],
+          "platforms": [
+            "linux"
+          ],
           "config": {
             "options": {
               "maintainer": "Harry Jubb",
@@ -38,7 +45,9 @@
         },
         {
           "name": "@electron-forge/maker-dmg",
-          "platforms": ["darwin"],
+          "platforms": [
+            "darwin"
+          ],
           "config": {
             "name": "Quacker",
             "overwrite": true
@@ -46,11 +55,26 @@
         },
         {
           "name": "@electron-forge/maker-squirrel",
-          "platforms": ["win32"],
+          "platforms": [
+            "win32"
+          ],
           "config": {
             "authors": "Harry Jubb",
             "setupExe": "quacker-setup.exe",
             "setupMsi": "quacker-setup.msi"
+          }
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "harryjubb",
+              "name": "quacker"
+            },
+            "prerelease": true,
+            "draft": true
           }
         }
       ],
@@ -85,6 +109,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@electron-forge/plugin-webpack": "6.0.0-beta.54",
+    "@electron-forge/publisher-github": "^6.0.0-beta.54",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.2",
