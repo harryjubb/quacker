@@ -1,5 +1,5 @@
 import vm from 'vm'
-import { app, session, BrowserWindow, globalShortcut, ipcMain, Notification } from 'electron'
+import { app, session, BrowserWindow, globalShortcut, ipcMain, Notification, shell } from 'electron'
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
@@ -90,7 +90,7 @@ ipcMain.handle('shortcutRefresh', (event, arg) => {
       const ret = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
         console.log(Notification)
-        const context = { Notification }
+        const context = { shell, Notification }
         vm.createContext(context);
 
         vm.runInContext(shortcut.action, context)

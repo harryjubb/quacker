@@ -19,11 +19,7 @@ export default function App() {
   const [shortcuts, setShortcuts] = useState([])
 
   useEffect(() => {
-    if (api.shortcutRefresh) {
-      api.shortcutRefresh(shortcuts)
-    } else {
-      console.log('no shortcutRefresh')
-    }
+    api.shortcutRefresh(shortcuts)
   })
 
   return (
@@ -31,7 +27,7 @@ export default function App() {
       <Row>
         <Col>
           <h3>Shortcuts</h3>
-          <Button size="sm" variant="success" onClick={() => setShortcuts([...shortcuts, { shortcut: '', action: '' }])}>Add</Button>
+          <Button size="sm" variant="success" onClick={() => setShortcuts([...shortcuts, { name: '', shortcut: '', secrets: '', action: '' }])}>Add</Button>
           {
             shortcuts.map((shortcut, index) => {
               return <Card  className="mt-3" key={index}>
@@ -41,7 +37,7 @@ export default function App() {
                     placeholder="Shortcut"
                     aria-label="Shortcut"
                     value={shortcut.shortcut}
-                    onChange={event => setShortcuts([...shortcuts.slice(0, index), { shortcut: event.target.value, action: 'none' }, ...shortcuts.slice(index + 1)])}
+                    onChange={event => setShortcuts([...shortcuts.slice(0, index), { name: 'New shortcut', shortcut: event.target.value, secrets: '', action: '// Your code here' }, ...shortcuts.slice(index + 1)])}
                   />
                 </InputGroup>
                 <AceEditor
