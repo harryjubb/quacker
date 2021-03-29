@@ -11,7 +11,7 @@ import AceEditor from "react-ace"
 
 import "ace-builds/src-noconflict/mode-javascript"
 import "ace-builds/src-noconflict/theme-github"
-import { API } from './types'
+import { API, Shortcut } from './types'
 
 // Add ContextBridge typing
 declare global {
@@ -24,7 +24,7 @@ const api = window.api
 
 export default (): ReactElement => {
 
-  const [shortcuts, setShortcuts] = useState([])
+  const [shortcuts, setShortcuts] = useState<Shortcut[]>([])
 
   useEffect(() => {
     api.setShortcuts(shortcuts)
@@ -35,7 +35,7 @@ export default (): ReactElement => {
       <Row>
         <Col>
           <h3>Shortcuts</h3>
-          <Button size="sm" variant="success" onClick={() => setShortcuts([...shortcuts, { name: '', shortcut: '', secrets: '', action: '' }])}>Add</Button>
+          <Button size="sm" variant="success" onClick={() => setShortcuts([...shortcuts, { name: 'New shortcut', shortcut: '', secrets: {}, action: '// Your code here' }])}>Add</Button>
           {
             shortcuts.map((shortcut, index) => {
               return <Card  className="mt-3" key={index}>
@@ -45,14 +45,14 @@ export default (): ReactElement => {
                     placeholder="Shortcut"
                     aria-label="Shortcut"
                     value={shortcut.shortcut}
-                    onChange={event => setShortcuts([...shortcuts.slice(0, index), { name: 'New shortcut', shortcut: event.target.value, secrets: '', action: '// Your code here' }, ...shortcuts.slice(index + 1)])}
+                    onChange={event => setShortcuts([...shortcuts.slice(0, index), { ...shortcut, shortcut: event.target.value }, ...shortcuts.slice(index + 1)])}
                   />
                 </InputGroup>
                 <AceEditor
                   mode="javascript"
                   theme="github"
                   value={shortcut.action}
-                  onChange={event => setShortcuts([...shortcuts.slice(0, index), { shortcut: shortcut.shortcut, action: event }, ...shortcuts.slice(index + 1)])}
+                  onChange={event => setShortcuts([...shortcuts.slice(0, index), { ...shortcut, action: event }, ...shortcuts.slice(index + 1)])}
                   name={`editor_${index}`}
                   editorProps={{ $blockScrolling: true }}
                 />,
