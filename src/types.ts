@@ -1,7 +1,7 @@
 export interface Shortcut {
   name: string
   shortcut: string
-  secrets: { [key: string]: string }
+  secrets: string
   action: string
 }
 
