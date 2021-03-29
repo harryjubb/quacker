@@ -2,6 +2,8 @@
 
 Listen for global shortcuts and run Javascript in response.
 
+**This software is currently pre-production and is not currently recommended for use.**
+
 ## Why?
 
 Having bought the fantastic [Duckypad](https://github.com/dekuNukem/duckyPad) macro keypad, I wanted a solution where I could send key commands to take equivalent and complex actions on Windows and Mac.
