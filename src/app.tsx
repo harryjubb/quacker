@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Card from 'react-bootstrap/esm/Card'
 import Col from 'react-bootstrap/esm/Col'
@@ -11,10 +11,18 @@ import AceEditor from "react-ace"
 
 import "ace-builds/src-noconflict/mode-javascript"
 import "ace-builds/src-noconflict/theme-github"
+import { API } from './types'
 
-const api = (window as any).api
+// Add ContextBridge typing
+declare global {
+  interface Window {
+    api: API
+  }
+}
 
-export default function App() {
+const api = window.api
+
+export default (): ReactElement => {
 
   const [shortcuts, setShortcuts] = useState([])
 

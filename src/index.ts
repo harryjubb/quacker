@@ -2,6 +2,7 @@ import vm from 'vm'
 import { app, session, BrowserWindow, globalShortcut, ipcMain, Notification, shell } from 'electron'
 import Store from 'electron-store'
 import robot from 'robotjs'
+import { Shortcut } from './types'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
@@ -87,7 +88,7 @@ ipcMain.handle('setShortcuts', (event, arg) => {
   console.log("event", event)
   console.log("arg", arg)
   globalShortcut.unregisterAll()
-  arg.forEach((shortcut: any) => {
+  arg.forEach((shortcut: Shortcut) => {
     try { 
       const ret = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
