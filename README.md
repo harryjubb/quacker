@@ -12,7 +12,7 @@ Having bought the fantastic [Duckypad](https://github.com/dekuNukem/duckyPad) ma
 
 **TLDR: Use at your own risk.**
 
-Shortcuts can be set up to run any given Javascript in a NodeJS `vm` context. This means that that complex actions can be executed: it also means that a lot of damage can be done, including but not limited to the permanent removal of files and installation of unwanted software.
+Shortcuts can be set up to run any given Javascript in a NodeJS `vm` context. This means that that complex actions can be executed: it also means that a lot of damage can be done, including but not limited to the permanent removal of files and installation of malicious software.
 
 **Do not run any Javascript that you do not understand and trust.**
 
