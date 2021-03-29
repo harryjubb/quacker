@@ -19,7 +19,7 @@ export default function App() {
   const [shortcuts, setShortcuts] = useState([])
 
   useEffect(() => {
-    api.shortcutRefresh(shortcuts)
+    api.setShortcuts(shortcuts)
   })
 
   return (

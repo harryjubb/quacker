@@ -1,5 +1,8 @@
 import vm from 'vm'
 import { app, session, BrowserWindow, globalShortcut, ipcMain, Notification, shell } from 'electron'
+import Store from 'electron-store'
+import robot from 'robotjs'
+
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
@@ -18,7 +21,6 @@ const createWindow = (): void => {
   //     }
   //   })
   // })
-
 
   const windowSession = session.fromPartition('persist:quacker')
   
@@ -54,7 +56,7 @@ const createWindow = (): void => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -81,7 +83,7 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.handle('shortcutRefresh', (event, arg) => {
+ipcMain.handle('setShortcuts', (event, arg) => {
   console.log("event", event)
   console.log("arg", arg)
   globalShortcut.unregisterAll()
@@ -89,17 +91,15 @@ ipcMain.handle('shortcutRefresh', (event, arg) => {
     try { 
       const ret = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
-        console.log(Notification)
-        const context = { shell, Notification }
+        const context = { robot, shell, Notification }
         vm.createContext(context);
-
         vm.runInContext(shortcut.action, context)
       })
       if (!ret) {
-        console.log('registration failed')
+        console.error('Shortcut registration failed')
       }
     } catch (error) {
-      console.log(`Error converting ${shortcut.shortcut}:`, error)
+      console.error(`Error converting ${shortcut.shortcut}:`, error)
     }
   })
 })
