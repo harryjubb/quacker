@@ -1,14 +1,22 @@
 import vm from 'vm'
-import { app, BrowserWindow, globalShortcut, ipcMain, Notification } from 'electron'
-declare const MAIN_WINDOW_WEBPACK_ENTRY: any
-declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any
+import { app, session, BrowserWindow, globalShortcut, ipcMain, Notification } from 'electron'
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit()
 }
-console.log("MAIN_WINDOW_WEBPACK_ENTRY", MAIN_WINDOW_WEBPACK_ENTRY)
-console.log("MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY", MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY)
+
+// Set up Content Security Policy
+session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  callback({
+    responseHeaders: {
+      ...details.responseHeaders,
+      'Content-Security-Policy': ['default-src \'none\'']
+    }
+  })
+})
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -16,8 +24,20 @@ const createWindow = (): void => {
     height: 600,
     width: 800,
     webPreferences: {
+      contextIsolation: true,
+      sandbox: true,
+      disableBlinkFeatures: 'Auxclick',
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
+  })
+
+  // Limit navigation
+  mainWindow.webContents.on('will-navigate', event => {
+    event.preventDefault()
+  })
+  
+  mainWindow.webContents.on('new-window', event => {
+    event.preventDefault()
   })
 
   // and load the index.html of the app.
