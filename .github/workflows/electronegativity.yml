@@ -1,2 +1,11 @@
-- name: Electronegativity
-  uses: doyensec/electronegativity-action@v1.1
+name: Electronegativity
+
+on: push
+
+jobs:
+  electronegativity:
+    name: Electronegativity Electron security check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Electronegativity
+        uses: doyensec/electronegativity-action@v1.1
