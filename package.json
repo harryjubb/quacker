@@ -45,16 +45,6 @@
           }
         },
         {
-          "name": "@electron-forge/maker-dmg",
-          "platforms": [
-            "darwin"
-          ],
-          "config": {
-            "name": "Quacker",
-            "overwrite": true
-          }
-        },
-        {
           "name": "@electron-forge/maker-squirrel",
           "platforms": [
             "win32"
