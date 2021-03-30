@@ -1,7 +1,7 @@
 {
   "name": "quacker",
   "productName": "Quacker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Cross-platform desktop application to run Javascript in response to global keyboard shortcuts",
   "main": ".webpack/main",
   "scripts": {
