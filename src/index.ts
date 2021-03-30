@@ -50,7 +50,11 @@ const createWindow = async (): Promise<void> => {
   
   // Limit navigation
   const navigateHandler = (event: Electron.Event, newUrl: string) => {
-    if (newUrl.startsWith('https://www.electronjs.org')) {
+    const hostname = new URL(newUrl).hostname
+    const allowedHosts = [
+      'www.electronjs.org'
+    ]
+    if (allowedHosts.includes(hostname)) {
       shell.openExternal(newUrl)
     }
     event.preventDefault()
