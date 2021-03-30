@@ -28,7 +28,6 @@ export default (): ReactElement => {
   const [shortcuts, setShortcuts] = useState<Shortcut[]>([])
 
   api.handleInitialShortcuts((initialShortcuts: Shortcut[]) => {
-      console.log(initialShortcuts)
       setShortcuts(initialShortcuts)
       setInitialStateLoaded(true)
   })

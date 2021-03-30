@@ -34,6 +34,7 @@ const createWindow = async (): Promise<void> => {
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
+    icon: './img/1F986_black_filled.png',
     webPreferences: {
       session: windowSession,
       contextIsolation: true,
