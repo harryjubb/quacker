@@ -1,12 +1,20 @@
 # Quacker
 
-Listen for global shortcuts and run Javascript in response.
+Listen for global shortcuts and ~quack~ run Javascript in response.
 
 **This software is currently pre-production and is incomplete.**
 
 ## Why?
 
-Having bought the fantastic [Duckypad](https://github.com/dekuNukem/duckyPad) macro keypad, I wanted a solution where I could send key commands to take equivalent and complex actions on Windows and Mac.
+Having bought the fantastic [Duckypad](https://github.com/dekuNukem/duckyPad) macro keypad, I wanted a solution where I could send key commands to take equivalent and complex actions on Windows and Mac. The name is of course inspired by Duckypad: quacking actions in response to keyboard shortcuts.
+
+> quacker
+>
+> _noun_
+> 
+> One who quacks
+
+Via [Wiktionary](https://en.wiktionary.org/wiki/quacker) (unaltered, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
 
 ## Security
 
