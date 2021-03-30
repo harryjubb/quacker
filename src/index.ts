@@ -1,6 +1,6 @@
 import fs from 'fs'
 import vm from 'vm'
-import { app, dialog, session, BrowserWindow, globalShortcut, ipcMain, Notification, shell } from 'electron'
+import { app, dialog, session, BrowserWindow, Menu, Tray, globalShortcut, ipcMain, Notification, shell } from 'electron'
 import settings from 'electron-settings'
 import robot from 'robotjs'
 import { Shortcut } from './types'
@@ -12,6 +12,9 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit()
 }
+
+/** Flag to check if we're genuinely quitting the app or just closing the window */
+let willQuit = false
 
 const createWindow = async (): Promise<void> => {
   // Set up Content Security Policy
@@ -46,6 +49,14 @@ const createWindow = async (): Promise<void> => {
     }
   })
 
+  // Prevent closure of the window: hide it instead
+  // so that the taskbar icon can bring it back
+  mainWindow.on('close', event => {
+    if (!willQuit) {
+      event.preventDefault()
+      mainWindow.hide()
+    }
+  })
   
   mainWindow.maximize()
   
@@ -68,6 +79,22 @@ const createWindow = async (): Promise<void> => {
   await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
   
   mainWindow.webContents.send('initialShortcuts', await(settings.get('shortcuts')) ?? [])
+
+  app.on('before-quit', () => {
+    willQuit = true
+  })
+
+  const tray = new Tray('./src/img/1F986_black_filled_16x16.png')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Show Quacker', type: 'normal', 'click': () => { mainWindow.show() } },
+    { type: 'separator' },
+    { label: 'Quit', type: 'normal', 'click': () => {
+      willQuit = true
+      app.quit()
+    } },
+  ])
+  tray.setToolTip('Quacker')
+  tray.setContextMenu(contextMenu)
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
