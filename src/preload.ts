@@ -9,5 +9,8 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.on('initialShortcuts', (event, initialShortcuts: Shortcut[]) => {
       handler(initialShortcuts)
     })
+  },
+  exportShortcuts: (shortcuts: Shortcut[]) => {
+    ipcRenderer.invoke('exportShortcuts', shortcuts)
   }
 })

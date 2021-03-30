@@ -47,6 +47,8 @@ export default (): ReactElement => {
           {
             initialStateLoaded ? <>
               <Button size="sm" variant="success" onClick={() => setShortcuts([...shortcuts, { name: 'New shortcut', shortcut: '', secrets: '{ "secret": "value" }', action: '// Your code here' }])}>Add</Button>
+              <Button className="ml-1" size="sm" variant="secondary" onClick={() => { console.log('boop')}}>Import</Button>
+              <Button className="ml-1" size="sm" variant="secondary" onClick={() => api.exportShortcuts(shortcuts)}>Export</Button>
               {
                 shortcuts.map((shortcut, index) => {
                   return <Card className="mt-3" key={index}>
@@ -72,7 +74,7 @@ export default (): ReactElement => {
                           onChange={event => setShortcuts([...shortcuts.slice(0, index), { ...shortcut, shortcut: event.target.value }, ...shortcuts.slice(index + 1)])}
                         />
                       </InputGroup>
-                      <label htmlFor={`secrets_editor_${index}`}>Secrets <small className="text-muted">JSON object containing data that are never imported / exported with shortcuts</small></label>
+                      <label htmlFor={`secrets_editor_${index}`}>Secrets <small className="text-muted">JSON object containing key:value pairs: values are never exported with shortcuts</small></label>
                       <AceEditor
                         name={`secrets_editor_${index}`}
                         className="mb-3"

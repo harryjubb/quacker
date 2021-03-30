@@ -12,4 +12,5 @@ export interface SetShortcuts {
 export interface API {
   setShortcuts: SetShortcuts
   handleInitialShortcuts: (handler: SetShortcuts) => void
+  exportShortcuts: SetShortcuts
 }

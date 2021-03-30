@@ -1,5 +1,6 @@
+import fs from 'fs'
 import vm from 'vm'
-import { app, session, BrowserWindow, globalShortcut, ipcMain, Notification, shell } from 'electron'
+import { app, dialog, session, BrowserWindow, globalShortcut, ipcMain, Notification, shell } from 'electron'
 import settings from 'electron-settings'
 import robot from 'robotjs'
 import { Shortcut } from './types'
@@ -116,4 +117,40 @@ ipcMain.handle('setShortcuts', (event, shortcuts) => {
   })
   // FIXME: Possible race condition for multiple calls in quick succession
   settings.set('shortcuts', shortcuts)
+})
+
+ipcMain.handle('exportShortcuts', async (event, shortcuts: Shortcut[]) => {
+  const exportData = JSON.stringify({
+    shortcuts: shortcuts.map(shortcut => ({
+      ...shortcut,
+      // Strip secret values
+      secrets: Object.fromEntries(
+        Object.entries(JSON.parse(shortcut.secrets)).map(([key, value]: [string, unknown]) => [key, ''])
+      )
+    }))
+  })
+
+  const timestamp = new Date().toISOString().replace(/:/g, '').replace(/\+/g, '-')
+
+  const defaultPath = `quacker_export_${timestamp}.json`
+
+  const save = await dialog.showSaveDialog({
+    defaultPath
+  })
+
+  if (save.canceled) {
+    return
+  }
+
+  if (save.filePath) {
+    fs.writeFile(save.filePath, exportData, (error) => {
+      let notification = null
+      if (error) {
+        notification = {title: "Export error", body: `Unable to export: ${error.message}`}
+      } else {
+        notification = {title: "Export successful", body: `Exported to ${save.filePath}`}
+      }
+      new Notification(notification).show()
+    })
+  }
 })
