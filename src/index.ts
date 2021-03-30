@@ -86,7 +86,15 @@ const createWindow = async (): Promise<void> => {
 
   const tray = new Tray('./src/img/1F986_black_filled_16x16.png')
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show Quacker', type: 'normal', 'click': () => { mainWindow.show() } },
+    { label: 'Show Quacker', type: 'normal', 'click': () => {
+      mainWindow.show()
+      app.dock.show()
+    }},
+    { label: 'Hide Quacker', type: 'normal', 'click': () => {
+      mainWindow.hide()
+      app.dock.hide()
+      new Notification({title: 'Quack!', body: 'Quacker is still listening for your shortcuts in the background'}).show()
+    }},
     { type: 'separator' },
     { label: 'Quit', type: 'normal', 'click': () => {
       willQuit = true
@@ -178,6 +186,7 @@ ipcMain.handle('exportShortcuts', async (event, shortcuts: Shortcut[]) => {
         notification = {title: "Export successful", body: `Exported to ${save.filePath}`}
       }
       new Notification(notification).show()
+      app.dock.bounce()
     })
   }
 })
