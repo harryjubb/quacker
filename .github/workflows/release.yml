@@ -13,6 +13,8 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 14.16.0
+    - name: install system dependencies
+      run: sudo apt-get install build-essential libxtst-dev libpng++-dev
     - name: install dependencies
       run: yarn install
     - name: build native modules
