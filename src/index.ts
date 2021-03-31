@@ -89,11 +89,11 @@ const createWindow = async (): Promise<void> => {
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show Quacker', type: 'normal', 'click': () => {
       mainWindow.show()
-      app.dock.show()
+      app.dock?.show()
     }},
     { label: 'Hide Quacker', type: 'normal', 'click': () => {
       mainWindow.hide()
-      app.dock.hide()
+      app.dock?.hide()
       new Notification({title: 'Quack!', body: 'Quacker is still listening for your shortcuts in the background'}).show()
     }},
     { type: 'separator' },
@@ -189,7 +189,6 @@ ipcMain.handle('exportShortcuts', async (event, shortcuts: Shortcut[]) => {
         notification = {title: "Export successful", body: `Exported to ${save.filePath}`}
       }
       new Notification(notification).show()
-      app.dock.bounce()
     })
   }
 })
