@@ -14,6 +14,8 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit()
 }
 
+let mainWindow: BrowserWindow
+
 /** Flag to check if we're genuinely quitting the app or just closing the window */
 let willQuit = false
 
@@ -36,7 +38,7 @@ const createWindow = async (): Promise<void> => {
   })
 
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
     icon: './img/1F986_black_filled.png',
@@ -134,6 +136,8 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
+  } else {
+    mainWindow?.show()
   }
 })
 
