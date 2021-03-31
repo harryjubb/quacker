@@ -38,6 +38,22 @@ If you have an example shortcut that you'd like to share, please feel free to ma
 
 Please use the [issues](https://github.com/harryjubb/quacker/issues) section to file bug reports. Please search existing issues to see if anything matches your issue before creating a new one. Please fill in the relevant issue template. 
 
+## Developing
+
+Yarn (classic) is used as the package manager. There is an `nvmrc` to match the Node version used with the version used by Electron.
+
+### Setup
+
+```nvm install && nvm use && yarn && yarn run robotjs:rebuild```
+
+### Development
+
+```nvm start```
+
+### Building
+
+```nvm make```
+
 ## Attributions
 
 The duck icon used for Quacker is designed by [OpenMoji](https://openmoji.org) – the open-source emoji and icon project. License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/#). The original has been modified to be filled in white, and to be resized and converted to application icons. Modified versions are available in this repository at `src/img/1F986_black_filled*.*`. The original and modified versions are licensed separately to the rest of the project, under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/#).
