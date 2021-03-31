@@ -48,11 +48,11 @@ Yarn (classic) is used as the package manager. There is an `nvmrc` to match the 
 
 ### Development
 
-```nvm start```
+```yarn start```
 
 ### Building
 
-```nvm make```
+```yarn make```
 
 ## Attributions
 
