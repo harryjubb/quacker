@@ -29,7 +29,7 @@ const createWindow = async (): Promise<void> => {
   // })
 
   const windowSession = session.fromPartition('persist:quacker')
-  
+
   // Disable all browser permissions
   windowSession.setPermissionRequestHandler((webContents, permission, callback) => {
     return callback(false)
@@ -58,9 +58,9 @@ const createWindow = async (): Promise<void> => {
       mainWindow.hide()
     }
   })
-  
+
   mainWindow.maximize()
-  
+
   // Limit navigation
   const navigateHandler = (event: Electron.Event, newUrl: string) => {
     const hostname = new URL(newUrl).hostname
@@ -72,14 +72,14 @@ const createWindow = async (): Promise<void> => {
     }
     event.preventDefault()
   }
-  
+
   mainWindow.webContents.on('will-navigate', navigateHandler)
   mainWindow.webContents.on('new-window', navigateHandler)
-  
+
   // Load the index.html of the app.
   await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
-  
-  mainWindow.webContents.send('initialShortcuts', await(settings.get('shortcuts')) ?? [])
+
+  mainWindow.webContents.send('initialShortcuts', await (settings.get('shortcuts')) ?? [])
 
   app.on('before-quit', () => {
     willQuit = true
@@ -87,20 +87,26 @@ const createWindow = async (): Promise<void> => {
 
   const tray = new Tray('./src/img/1F986_black_filled_16x16.png')
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show Quacker', type: 'normal', 'click': () => {
-      mainWindow.show()
-      app.dock?.show()
-    }},
-    { label: 'Hide Quacker', type: 'normal', 'click': () => {
-      mainWindow.hide()
-      app.dock?.hide()
-      new Notification({title: 'Quack!', body: 'Quacker is still listening for your shortcuts in the background'}).show()
-    }},
+    {
+      label: 'Show Quacker', type: 'normal', 'click': () => {
+        mainWindow.show()
+        app.dock?.show()
+      }
+    },
+    {
+      label: 'Hide Quacker', type: 'normal', 'click': () => {
+        mainWindow.hide()
+        app.dock?.hide()
+        new Notification({ title: 'Quack!', body: 'Quacker is still listening for your shortcuts in the background' }).show()
+      }
+    },
     { type: 'separator' },
-    { label: 'Quit', type: 'normal', 'click': () => {
-      willQuit = true
-      app.quit()
-    } },
+    {
+      label: 'Quit', type: 'normal', 'click': () => {
+        willQuit = true
+        app.quit()
+      }
+    },
   ])
   tray.setToolTip('Quacker')
   tray.setContextMenu(contextMenu)
@@ -133,7 +139,13 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-const defaultContext = { axios, robot, shell, Notification }
+const defaultContext = {
+  axios,
+  robot,
+  shell,
+  Notification,
+  platform: process.platform
+}
 
 ipcMain.handle('setShortcuts', (event, shortcuts) => {
   globalShortcut.unregisterAll()
@@ -141,7 +153,7 @@ ipcMain.handle('setShortcuts', (event, shortcuts) => {
     const secrets = JSON.parse(shortcut.secrets)
     const context = { ...defaultContext, secrets }
     const vmContext = vm.createContext(context)
-    try { 
+    try {
       const shortcutRegistration = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
         vm.runInContext(shortcut.action, vmContext)
@@ -184,9 +196,9 @@ ipcMain.handle('exportShortcuts', async (event, shortcuts: Shortcut[]) => {
     fs.writeFile(save.filePath, exportData, (error) => {
       let notification = null
       if (error) {
-        notification = {title: "Export error", body: `Unable to export: ${error.message}`}
+        notification = { title: "Export error", body: `Unable to export: ${error.message}` }
       } else {
-        notification = {title: "Export successful", body: `Exported to ${save.filePath}`}
+        notification = { title: "Export successful", body: `Exported to ${save.filePath}` }
       }
       new Notification(notification).show()
     })
