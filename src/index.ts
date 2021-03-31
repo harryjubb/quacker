@@ -133,7 +133,7 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-const defaultContext = { robot, shell, Notification }
+const defaultContext = { axios, robot, shell, Notification }
 
 ipcMain.handle('setShortcuts', (event, shortcuts) => {
   globalShortcut.unregisterAll()

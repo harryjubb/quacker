@@ -102,6 +102,7 @@
   },
   "dependencies": {
     "ace-builds": "^1.4.12",
+    "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "electron-settings": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
