@@ -3,6 +3,7 @@ import vm from 'vm'
 import { app, dialog, session, BrowserWindow, Menu, Tray, globalShortcut, ipcMain, Notification, shell } from 'electron'
 import settings from 'electron-settings'
 import robot from 'robotjs'
+import axios from 'axios'
 import { Shortcut } from './types'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
@@ -132,18 +133,20 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+const defaultContext = { robot, shell, Notification }
+
 ipcMain.handle('setShortcuts', (event, shortcuts) => {
   globalShortcut.unregisterAll()
   shortcuts.forEach((shortcut: Shortcut) => {
+    const secrets = JSON.parse(shortcut.secrets)
+    const context = { ...defaultContext, secrets }
+    const vmContext = vm.createContext(context)
     try { 
-      const ret = globalShortcut.register(shortcut.shortcut, () => {
+      const shortcutRegistration = globalShortcut.register(shortcut.shortcut, () => {
         console.log(`${shortcut.shortcut} called!`)
-        const secrets = JSON.parse(shortcut.secrets)
-        const context = { secrets, robot, shell, Notification }
-        vm.createContext(context);
-        vm.runInContext(shortcut.action, context)
+        vm.runInContext(shortcut.action, vmContext)
       })
-      if (!ret) {
+      if (!shortcutRegistration) {
         console.error('Shortcut registration failed')
       }
     } catch (error) {
